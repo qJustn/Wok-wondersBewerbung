@@ -1,1 +1,1635 @@
+from pathlib import Path
+from PIL import Image
+import base64, io, textwrap
 
+# Use the user-provided menu artwork only as a visual texture/reference.
+# It is compressed and embedded directly into the HTML so the website remains a single file.
+menu_path = Path("/mnt/data/Screenshot 2026-09-10 013458(1).png")
+img = Image.open(menu_path).convert("RGB")
+img.thumbnail((760, 1150))
+buf = io.BytesIO()
+img.save(buf, format="WEBP", quality=72, method=6)
+menu_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+menu_data_uri = f"data:image/webp;base64,{menu_b64}"
+
+html = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06100d">
+<meta name="description" content="Bewerbung von Jeff Jeremain bei Wok & Wonders">
+<title>Jeff Jeremain | Bewerbung bei Wok & Wonders</title>
+
+<style>
+/* =========================================================
+   WOK & WONDERS – SINGLE FILE APPLICATION WEBSITE
+   Alles befindet sich in dieser index.html: HTML + CSS + JS.
+   ========================================================= */
+
+:root {{
+  --bg: #06100d;
+  --bg-2: #091712;
+  --panel: rgba(8, 22, 18, .82);
+  --panel-strong: rgba(6, 16, 13, .94);
+  --gold: #c7922e;
+  --gold-2: #f4d47a;
+  --gold-3: #8e611d;
+  --teal: #3db7b0;
+  --teal-2: #9be5df;
+  --text: #f6f1e6;
+  --muted: #b7c0bb;
+  --line: rgba(215, 169, 71, .27);
+  --teal-line: rgba(61, 183, 176, .25);
+  --shadow: 0 28px 80px rgba(0,0,0,.48);
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}}
+
+* {{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}}
+
+html {{
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}}
+
+body {{
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(61,183,176,.09), transparent 24rem),
+    radial-gradient(circle at 88% 28%, rgba(199,146,46,.09), transparent 30rem),
+    radial-gradient(circle at 50% 90%, rgba(61,183,176,.04), transparent 28rem),
+    linear-gradient(180deg, #040908 0%, var(--bg) 38%, #07140f 72%, #040908 100%);
+}}
+
+body::before {{
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -5;
+  opacity: .14;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 95%);
+}}
+
+::selection {{
+  background: var(--gold);
+  color: #09100d;
+}}
+
+a {{
+  color: inherit;
+  text-decoration: none;
+}}
+
+button {{
+  font: inherit;
+}}
+
+img {{
+  max-width: 100%;
+  display: block;
+}}
+
+.container {{
+  width: min(1160px, calc(100% - 36px));
+  margin-inline: auto;
+}}
+
+.site-frame {{
+  position: fixed;
+  inset: 10px;
+  z-index: 99;
+  pointer-events: none;
+  border: 1px solid rgba(209,158,54,.35);
+  box-shadow: inset 0 0 0 5px rgba(7,15,12,.28);
+}}
+
+.site-frame::before,
+.site-frame::after {{
+  content: "◇";
+  position: absolute;
+  left: 50%;
+  color: var(--gold-2);
+  background: #07100d;
+  padding: 0 10px;
+  line-height: 1;
+  transform: translateX(-50%);
+}}
+
+.site-frame::before {{ top: -7px; }}
+.site-frame::after {{ bottom: -7px; }}
+
+.corner {{
+  position: fixed;
+  width: 52px;
+  height: 52px;
+  pointer-events: none;
+  z-index: 100;
+  opacity: .78;
+}}
+
+.corner::before,
+.corner::after {{
+  content: "";
+  position: absolute;
+  background: var(--gold);
+}}
+
+.corner::before {{ width: 100%; height: 1px; top: 0; left: 0; }}
+.corner::after  {{ width: 1px; height: 100%; top: 0; left: 0; }}
+
+.corner.tl {{ top: 18px; left: 18px; }}
+.corner.tr {{ top: 18px; right: 18px; transform: rotate(90deg); }}
+.corner.bl {{ bottom: 18px; left: 18px; transform: rotate(-90deg); }}
+.corner.br {{ bottom: 18px; right: 18px; transform: rotate(180deg); }}
+
+.noise {{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 80;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}}
+
+.eyebrow {{
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: .24em;
+  font-size: .76rem;
+  font-weight: 900;
+}}
+
+.section {{
+  position: relative;
+  padding: 96px 0;
+}}
+
+.section-title {{
+  max-width: 900px;
+  margin: 12px 0 22px;
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 5.15rem);
+  line-height: .96;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+}}
+
+.section-title .gold {{
+  color: var(--gold-2);
+  text-shadow: 0 0 30px rgba(215,169,71,.13);
+}}
+
+.section-copy {{
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}}
+
+.ornament {{
+  width: min(440px, 80vw);
+  height: 24px;
+  margin: 24px 0;
+  position: relative;
+}}
+
+.ornament::before {{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}}
+
+.ornament::after {{
+  content: "◆";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 0 13px;
+  transform: translate(-50%, -52%);
+  color: var(--gold-2);
+  background: var(--bg);
+  font-size: .78rem;
+}}
+
+.reveal {{
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .75s ease, transform .75s ease;
+}}
+
+.reveal.visible {{
+  opacity: 1;
+  transform: none;
+}}
+
+/* ========================= NAV ========================= */
+
+.nav {{
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 1px solid rgba(215,169,71,.16);
+  background: rgba(4, 10, 8, .76);
+  backdrop-filter: blur(18px);
+}}
+
+.nav-inner {{
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}}
+
+.brand {{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}}
+
+.brand-seal {{
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.28rem;
+  box-shadow:
+    inset 0 0 25px rgba(199,146,46,.09),
+    0 0 24px rgba(61,183,176,.06);
+}}
+
+.brand-copy strong {{
+  display: block;
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: .09em;
+}}
+
+.brand-copy span {{
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .67rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}}
+
+.nav-links {{
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  font-size: .86rem;
+  font-weight: 800;
+}}
+
+.nav-links a {{
+  color: #dddcd5;
+  transition: color .18s ease;
+}}
+
+.nav-links a:hover {{
+  color: var(--gold-2);
+}}
+
+.nav-links .nav-cta {{
+  padding: 9px 15px;
+  border: 1px solid rgba(215,169,71,.6);
+  color: var(--gold-2);
+  border-radius: 999px;
+}}
+
+.menu-btn {{
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  color: var(--gold-2);
+  background: transparent;
+  cursor: pointer;
+}}
+
+/* ========================= HERO ========================= */
+
+.hero {{
+  min-height: calc(100svh - 78px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 76px 0 90px;
+  overflow: hidden;
+}}
+
+.hero::before {{
+  content: "";
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  right: -350px;
+  top: 48%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  border: 1px solid rgba(215,169,71,.11);
+  box-shadow:
+    0 0 0 54px rgba(215,169,71,.015),
+    0 0 0 108px rgba(61,183,176,.012);
+}}
+
+.hero-grid {{
+  display: grid;
+  grid-template-columns: 1.06fr .94fr;
+  align-items: center;
+  gap: 66px;
+  position: relative;
+  z-index: 2;
+}}
+
+.kicker {{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--teal-2);
+  font-size: .76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .22em;
+}}
+
+.kicker::before {{
+  content: "";
+  width: 34px;
+  height: 1px;
+  background: var(--teal);
+}}
+
+.hero h1 {{
+  margin: 18px 0 22px;
+  max-width: 760px;
+  font-family: var(--serif);
+  font-size: clamp(4rem, 9vw, 8.6rem);
+  line-height: .82;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}}
+
+.hero h1 .gold {{
+  color: var(--gold-2);
+  text-shadow:
+    0 3px 0 #765016,
+    0 10px 30px rgba(199,146,46,.18);
+}}
+
+.hero h1 .sub {{
+  display: block;
+  margin-top: 22px;
+  color: var(--teal);
+  font-family: var(--sans);
+  font-size: .22em;
+  line-height: 1.3;
+  letter-spacing: .16em;
+}}
+
+.hero-copy {{
+  max-width: 650px;
+  color: var(--muted);
+  font-size: 1.08rem;
+}}
+
+.hero-actions {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}}
+
+.btn {{
+  min-height: 52px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 900;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+  transition: transform .18s ease, filter .18s ease, border-color .18s ease;
+}}
+
+.btn:hover {{
+  transform: translateY(-2px);
+}}
+
+.btn-primary {{
+  color: #10130f;
+  background: linear-gradient(135deg, #f5da84, #c18a26);
+  box-shadow: 0 12px 38px rgba(199,146,46,.18);
+}}
+
+.btn-primary:hover {{
+  filter: brightness(1.06);
+}}
+
+.btn-secondary {{
+  color: #b9f5f1;
+  background: rgba(61,183,176,.055);
+  border-color: rgba(61,183,176,.56);
+}}
+
+.hero-meta {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 28px;
+  color: #d8dad5;
+  font-size: .86rem;
+}}
+
+.hero-meta span {{
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}}
+
+.hero-meta i {{
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 10px var(--teal);
+}}
+
+.hero-art {{
+  position: relative;
+  min-height: 590px;
+  display: grid;
+  place-items: center;
+}}
+
+.poster-shell {{
+  width: min(445px, 86vw);
+  aspect-ratio: 607 / 918;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(215,169,71,.7);
+  padding: 10px;
+  background: #03100c;
+  box-shadow: var(--shadow);
+  transform: rotate(1.1deg);
+}}
+
+.poster-shell::before {{
+  content: "";
+  position: absolute;
+  inset: 7px;
+  z-index: 3;
+  pointer-events: none;
+  border: 1px solid rgba(246,210,117,.46);
+}}
+
+.poster-shell::after {{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(2,8,6,.05), rgba(2,8,6,.19)),
+    radial-gradient(circle at center, transparent 45%, rgba(0,0,0,.3) 100%);
+}}
+
+.poster-img {{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(.92) contrast(1.03) brightness(.86);
+}}
+
+.seal {{
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  left: -47px;
+  bottom: 54px;
+  z-index: 7;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border-radius: 50%;
+  color: #06100d;
+  background:
+    radial-gradient(circle, #72d5cf 0 58%, #3ab5ad 59% 100%);
+  border: 8px solid #eef9f7;
+  outline: 2px solid #3ab5ad;
+  transform: rotate(-7deg);
+  box-shadow: 0 18px 45px rgba(0,0,0,.35);
+}}
+
+.seal strong {{
+  width: 100px;
+  font-size: .98rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}}
+
+.hero-card {{
+  position: absolute;
+  right: -18px;
+  top: 38px;
+  z-index: 7;
+  width: 190px;
+  padding: 17px 18px;
+  background: rgba(4,12,9,.91);
+  border: 1px solid rgba(215,169,71,.46);
+  box-shadow: 0 18px 50px rgba(0,0,0,.4);
+}}
+
+.hero-card small {{
+  display: block;
+  margin-bottom: 5px;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 900;
+}}
+
+.hero-card strong {{
+  display: block;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.13rem;
+  line-height: 1.15;
+}}
+
+/* Floating cloud ornaments */
+.cloud {{
+  position: absolute;
+  z-index: 0;
+  width: 150px;
+  height: 55px;
+  opacity: .32;
+  filter: drop-shadow(0 0 18px rgba(61,183,176,.1));
+}}
+
+.cloud span {{
+  position: absolute;
+  border: 2px solid var(--teal);
+  border-radius: 50%;
+}}
+
+.cloud span:nth-child(1) {{ width: 62px; height: 52px; left: 14px; top: 4px; }}
+.cloud span:nth-child(2) {{ width: 54px; height: 46px; left: 56px; top: 0; }}
+.cloud span:nth-child(3) {{ width: 42px; height: 36px; left: 92px; top: 15px; }}
+.cloud span:nth-child(4) {{ width: 115px; height: 27px; left: 13px; top: 30px; border-radius: 40px; }}
+
+.cloud.one {{ left: -20px; top: 105px; }}
+.cloud.two {{ right: -25px; bottom: 88px; transform: scale(.86) rotate(180deg); }}
+
+/* ========================= PROFILE ========================= */
+
+.profile-strip {{
+  border-top: 1px solid rgba(61,183,176,.2);
+  border-bottom: 1px solid rgba(61,183,176,.2);
+  background: linear-gradient(90deg, rgba(61,183,176,.055), rgba(199,146,46,.03), rgba(61,183,176,.055));
+}}
+
+.profile-grid {{
+  min-height: 152px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: stretch;
+}}
+
+.fact {{
+  position: relative;
+  padding: 31px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}}
+
+.fact + .fact {{
+  border-left: 1px solid rgba(255,255,255,.075);
+}}
+
+.fact span {{
+  color: var(--teal);
+  font-size: .69rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}}
+
+.fact strong {{
+  margin-top: 8px;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  line-height: 1.2;
+}}
+
+/* ========================= LETTER ========================= */
+
+.application-grid {{
+  display: grid;
+  grid-template-columns: .86fr 1.14fr;
+  gap: 48px;
+  align-items: start;
+}}
+
+.side-title {{
+  position: sticky;
+  top: 112px;
+}}
+
+.monogram {{
+  width: 110px;
+  height: 110px;
+  margin-bottom: 26px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 40px rgba(199,146,46,.08);
+}}
+
+.monogram::after {{
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(215,169,71,.33);
+}}
+
+.letter {{
+  position: relative;
+  padding: clamp(28px, 5vw, 54px);
+  background:
+    linear-gradient(135deg, rgba(215,169,71,.055), transparent 30%),
+    rgba(8,22,18,.77);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}}
+
+.letter::before {{
+  content: "申";
+  position: absolute;
+  right: 24px;
+  top: 15px;
+  color: rgba(215,169,71,.055);
+  font-family: var(--serif);
+  font-size: 10rem;
+  line-height: 1;
+}}
+
+.letter h3 {{
+  margin-bottom: 22px;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.65rem;
+}}
+
+.letter p {{
+  position: relative;
+  color: #d1d4cf;
+  font-size: 1.02rem;
+}}
+
+.letter p + p {{
+  margin-top: 17px;
+}}
+
+.signature {{
+  margin-top: 30px;
+  color: var(--gold-2);
+  font-family: "Brush Script MT", "Segoe Script", cursive;
+  font-size: 2.2rem;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}}
+
+/* ========================= STRENGTHS ========================= */
+
+.strengths {{
+  background:
+    radial-gradient(circle at 70% 40%, rgba(61,183,176,.06), transparent 24rem),
+    linear-gradient(180deg, transparent, rgba(215,169,71,.025), transparent);
+}}
+
+.cards {{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 42px;
+}}
+
+.card {{
+  min-height: 220px;
+  position: relative;
+  overflow: hidden;
+  padding: 28px 24px;
+  background: rgba(7,19,15,.76);
+  border: 1px solid var(--teal-line);
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}}
+
+.card:hover {{
+  transform: translateY(-6px);
+  border-color: rgba(61,183,176,.58);
+  background: rgba(9,26,20,.92);
+}}
+
+.card::after {{
+  content: "";
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  right: -48px;
+  bottom: -48px;
+  border-radius: 50%;
+  border: 1px solid rgba(215,169,71,.22);
+}}
+
+.card-icon {{
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 22px;
+  color: var(--gold-2);
+  border: 1px solid rgba(215,169,71,.38);
+  border-radius: 50%;
+  font-size: 1.25rem;
+}}
+
+.card h3 {{
+  margin-bottom: 10px;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.22rem;
+}}
+
+.card p {{
+  color: var(--muted);
+  font-size: .92rem;
+}}
+
+/* ========================= AREAS ========================= */
+
+.areas-grid {{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 17px;
+  margin-top: 40px;
+}}
+
+.area {{
+  padding: 28px;
+  position: relative;
+  border: 1px solid var(--line);
+  background: rgba(4,13,10,.72);
+}}
+
+.area::before {{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(var(--gold), var(--teal));
+  opacity: .65;
+}}
+
+.area small {{
+  color: var(--teal);
+  font-size: .69rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+}}
+
+.area h3 {{
+  margin: 9px 0 8px;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.35rem;
+}}
+
+.area p {{
+  color: var(--muted);
+  font-size: .92rem;
+}}
+
+/* ========================= CTA / CONTACT ========================= */
+
+.cta {{
+  padding: 78px 0;
+}}
+
+.cta-box {{
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 34px;
+  padding: clamp(30px, 6vw, 66px);
+  border: 1px solid rgba(215,169,71,.5);
+  background:
+    radial-gradient(circle at 88% 50%, rgba(61,183,176,.12), transparent 18rem),
+    linear-gradient(135deg, rgba(215,169,71,.08), rgba(6,16,13,.95));
+  box-shadow: var(--shadow);
+}}
+
+.cta-box::after {{
+  content: "龍";
+  position: absolute;
+  right: 7%;
+  top: 50%;
+  z-index: 0;
+  transform: translateY(-50%);
+  color: rgba(215,169,71,.055);
+  font-family: var(--serif);
+  font-size: clamp(9rem, 20vw, 18rem);
+  line-height: 1;
+}}
+
+.cta-copy {{
+  position: relative;
+  z-index: 2;
+}}
+
+.cta-copy h2 {{
+  max-width: 730px;
+  margin-bottom: 14px;
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: .96;
+  text-transform: uppercase;
+}}
+
+.cta-copy p {{
+  max-width: 690px;
+  color: var(--muted);
+}}
+
+.cta-actions {{
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 10px;
+  min-width: 220px;
+}}
+
+.contact-row {{
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}}
+
+.contact-box {{
+  padding: 26px 24px;
+}}
+
+.contact-box + .contact-box {{
+  border-left: 1px solid rgba(255,255,255,.08);
+}}
+
+.contact-box small {{
+  display: block;
+  color: var(--teal);
+  font-size: .7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+}}
+
+.contact-box strong {{
+  display: block;
+  margin-top: 7px;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.15rem;
+}}
+
+.footer {{
+  padding: 35px 0 55px;
+  color: #7e8983;
+  font-size: .8rem;
+}}
+
+.footer-row {{
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}}
+
+/* Toast */
+.toast {{
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 200;
+  min-width: 260px;
+  max-width: calc(100% - 30px);
+  padding: 12px 16px;
+  color: #07100d;
+  background: var(--teal-2);
+  border: 1px solid #d7fffb;
+  box-shadow: 0 16px 45px rgba(0,0,0,.35);
+  font-weight: 800;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, 14px);
+  pointer-events: none;
+  transition: .22s ease;
+}}
+
+.toast.show {{
+  opacity: 1;
+  transform: translate(-50%, 0);
+}}
+
+/* Scroll progress */
+.progress {{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 120;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--gold-2));
+  box-shadow: 0 0 15px rgba(61,183,176,.4);
+}}
+
+/* ========================= RESPONSIVE ========================= */
+
+@media (max-width: 980px) {{
+  .hero-grid,
+  .application-grid,
+  .cta-box {{
+    grid-template-columns: 1fr;
+  }}
+
+  .hero-art {{
+    min-height: auto;
+    padding-top: 24px;
+  }}
+
+  .poster-shell {{
+    width: min(420px, 82vw);
+  }}
+
+  .profile-grid,
+  .cards {{
+    grid-template-columns: repeat(2, 1fr);
+  }}
+
+  .areas-grid {{
+    grid-template-columns: repeat(2, 1fr);
+  }}
+
+  .side-title {{
+    position: static;
+  }}
+
+  .cta-actions {{
+    display: flex;
+    flex-wrap: wrap;
+  }}
+}}
+
+@media (max-width: 760px) {{
+  .site-frame {{
+    inset: 6px;
+  }}
+
+  .corner {{
+    display: none;
+  }}
+
+  .nav-inner {{
+    min-height: 70px;
+  }}
+
+  .nav-links {{
+    display: none;
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 76px;
+    padding: 18px;
+    background: rgba(4,10,8,.98);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    flex-direction: column;
+    align-items: stretch;
+  }}
+
+  .nav-links.open {{
+    display: flex;
+  }}
+
+  .menu-btn {{
+    display: inline-grid;
+    place-items: center;
+  }}
+
+  .hero {{
+    padding-top: 55px;
+  }}
+
+  .hero h1 {{
+    font-size: clamp(3.25rem, 17vw, 6.2rem);
+  }}
+
+  .hero-card {{
+    right: -5px;
+    top: 26px;
+    width: 160px;
+  }}
+
+  .seal {{
+    width: 126px;
+    height: 126px;
+    left: -15px;
+    bottom: 35px;
+  }}
+
+  .profile-grid,
+  .cards,
+  .areas-grid,
+  .contact-row {{
+    grid-template-columns: 1fr;
+  }}
+
+  .fact + .fact,
+  .contact-box + .contact-box {{
+    border-left: 0;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }}
+
+  .section {{
+    padding: 78px 0;
+  }}
+
+  .letter {{
+    padding: 28px 22px;
+  }}
+
+  .cta-actions .btn {{
+    width: 100%;
+  }}
+}}
+
+@media (max-width: 430px) {{
+  .brand-copy span {{
+    display: none;
+  }}
+
+  .hero-meta {{
+    display: grid;
+  }}
+
+  .hero-card {{
+    display: none;
+  }}
+
+  .poster-shell {{
+    width: 88vw;
+  }}
+
+  .seal {{
+    transform: scale(.86) rotate(-7deg);
+    transform-origin: left bottom;
+  }}
+}}
+
+/* ========================= PRINT / PDF ========================= */
+
+@media print {{
+  * {{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }}
+
+  .nav,
+  .site-frame,
+  .corner,
+  .noise,
+  .progress,
+  .cloud,
+  .hero-actions,
+  .cta-actions,
+  .toast {{
+    display: none !important;
+  }}
+
+  body {{
+    background: #06100d !important;
+  }}
+
+  .hero {{
+    min-height: auto;
+    padding: 35px 0;
+  }}
+
+  .hero-grid {{
+    grid-template-columns: 1.05fr .95fr;
+    gap: 28px;
+  }}
+
+  .poster-shell {{
+    width: 285px;
+  }}
+
+  .hero-art {{
+    min-height: auto;
+  }}
+
+  .section {{
+    padding: 42px 0;
+    break-inside: avoid;
+  }}
+
+  .cards,
+  .profile-grid,
+  .areas-grid {{
+    break-inside: avoid;
+  }}
+}}
+
+@media (prefers-reduced-motion: reduce) {{
+  *,
+  *::before,
+  *::after {{
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }}
+
+  .reveal {{
+    opacity: 1;
+    transform: none;
+  }}
+}}
+</style>
+</head>
+
+<body>
+<div class="progress" id="progress"></div>
+<div class="site-frame"></div>
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+<div class="noise"></div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top" aria-label="Zur Startseite">
+      <div class="brand-seal">龍</div>
+      <div class="brand-copy">
+        <strong>WOK &amp; WONDERS</strong>
+        <span>Bewerbung · Jeff Jeremain</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#profil">Profil</a>
+      <a href="#anschreiben">Anschreiben</a>
+      <a href="#staerken">Stärken</a>
+      <a href="#bereiche">Bereiche</a>
+      <a class="nav-cta" href="#kontakt">Kontakt</a>
+    </div>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Menü öffnen" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="cloud one" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="cloud two" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="container hero-grid">
+      <div class="reveal">
+        <div class="kicker">Persönliche Bewerbung</div>
+
+        <h1>
+          Jeff
+          <span class="gold">Jeremain</span>
+          <span class="sub">Bewerbung bei Wok &amp; Wonders</span>
+        </h1>
+
+        <p class="hero-copy">
+          Ich möchte Teil eures Teams werden und mich mit Motivation, Zuverlässigkeit
+          und einer positiven Einstellung im Restaurantalltag einbringen.
+          Das Zusammenspiel aus moderner Asia-Gastronomie, Teamgeist und dem markanten
+          Wok-&amp;-Wonders-Konzept spricht mich besonders an.
+        </p>
+
+        <div class="ornament"></div>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="tel:6029103965">☎ Jetzt anrufen</a>
+          <button class="btn btn-secondary" type="button" onclick="printApplication()">⎙ Als PDF / Drucken</button>
+        </div>
+
+        <div class="hero-meta" aria-label="Kurzinformationen">
+          <span><i></i> 36 Jahre</span>
+          <span><i></i> Visum 28</span>
+          <span><i></i> Bridge Street, 7294</span>
+        </div>
+      </div>
+
+      <div class="hero-art reveal">
+        <div class="poster-shell" aria-label="Wok & Wonders Designmotiv">
+          <img
+            class="poster-img"
+            src="{menu_data_uri}"
+            alt="Wok & Wonders Asia Restaurant Designmotiv mit goldenem Drachen"
+          >
+        </div>
+
+        <div class="seal" aria-hidden="true">
+          <strong>Motiviert<br>für euer<br>Team</strong>
+        </div>
+
+        <div class="hero-card">
+          <small>Bewerber</small>
+          <strong>Jeff Jeremain<br>36 Jahre</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="profile-strip" id="profil">
+    <div class="container profile-grid">
+      <div class="fact reveal">
+        <span>Name</span>
+        <strong>Jeff Jeremain</strong>
+      </div>
+      <div class="fact reveal">
+        <span>Alter</span>
+        <strong>36 Jahre</strong>
+      </div>
+      <div class="fact reveal">
+        <span>Visum</span>
+        <strong>28</strong>
+      </div>
+      <div class="fact reveal">
+        <span>Telefon</span>
+        <strong><a href="tel:6029103965">6029103965</a></strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="anschreiben">
+    <div class="container application-grid">
+      <div class="side-title reveal">
+        <div class="monogram">JJ</div>
+        <div class="eyebrow">Bewerbungsschreiben</div>
+        <h2 class="section-title">Warum <span class="gold">ich?</span></h2>
+        <p class="section-copy">
+          Eine kompakte, persönliche Bewerbung – passend zum Stil von Wok &amp; Wonders.
+        </p>
+      </div>
+
+      <article class="letter reveal">
+        <h3>Sehr geehrtes Wok-&amp;-Wonders-Team,</h3>
+
+        <p>
+          mit großem Interesse bewerbe ich mich um eine Mitarbeit in Ihrem Restaurant.
+          Ihr Auftritt verbindet asiatische Ästhetik, modernes Ambiente und eine klare
+          Teamkultur – genau dieses Umfeld finde ich spannend.
+        </p>
+
+        <p>
+          Ich möchte mich zuverlässig, freundlich und flexibel in den täglichen Ablauf
+          einbringen. Besonders wichtig sind mir ein respektvoller Umgang im Team,
+          aufmerksames Arbeiten und die Bereitschaft, dort anzupacken, wo Unterstützung
+          gebraucht wird.
+        </p>
+
+        <p>
+          An Ihrer Ausschreibung gefallen mir besonders die flexiblen Arbeitszeiten,
+          die Zusammenarbeit auf Augenhöhe und das motivierte Umfeld. Ich bin offen für
+          unterschiedliche Einsatzbereiche und freue mich darauf, Neues zu lernen und
+          Verantwortung zu übernehmen.
+        </p>
+
+        <p>
+          Ich bin 36 Jahre alt, mein Visum ist 28, ich wohne in
+          <strong>Bridge Street, 7294</strong> und bin telefonisch unter
+          <strong>6029103965</strong> erreichbar.
+        </p>
+
+        <p>
+          Über die Möglichkeit, mich persönlich vorzustellen, würde ich mich sehr freuen.
+        </p>
+
+        <div class="signature">Jeff Jeremain</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section strengths" id="staerken">
+    <div class="container">
+      <div class="eyebrow reveal">Was ich mitbringe</div>
+      <h2 class="section-title reveal">Meine <span class="gold">Stärken</span></h2>
+      <p class="section-copy reveal">
+        Eigenschaften, die in einem dynamischen Restaurantbetrieb wichtig sind und zu
+        einem starken Team beitragen.
+      </p>
+
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-icon">🤝</div>
+          <h3>Teamorientierung</h3>
+          <p>
+            Ein respektvoller, unkomplizierter Umgang und gegenseitige Unterstützung
+            sind für mich die Grundlage guter Zusammenarbeit.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon">✓</div>
+          <h3>Zuverlässigkeit</h3>
+          <p>
+            Absprachen ernst nehmen, pünktlich sein und Aufgaben sorgfältig erledigen –
+            darauf kann sich ein Team verlassen.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon">⚡</div>
+          <h3>Flexibilität</h3>
+          <p>
+            Im Restaurant kann sich die Situation schnell ändern. Ich bin bereit,
+            flexibel zu unterstützen und mich auf neue Aufgaben einzustellen.
+          </p>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon">★</div>
+          <h3>Motivation</h3>
+          <p>
+            Ich möchte mich aktiv einbringen, Neues lernen und meinen Teil zu einem
+            professionellen und angenehmen Gastronomieerlebnis beitragen.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bereiche">
+    <div class="container">
+      <div class="eyebrow reveal">Offen für verschiedene Aufgaben</div>
+      <h2 class="section-title reveal">Mögliche <span class="gold">Einsatzbereiche</span></h2>
+      <p class="section-copy reveal">
+        Ich bin offen dafür, je nach Bedarf des Restaurants in unterschiedlichen
+        Bereichen mitzuarbeiten und mich einzuarbeiten.
+      </p>
+
+      <div class="areas-grid">
+        <article class="area reveal">
+          <small>01 · Gästebereich</small>
+          <h3>Service &amp; Betreuung</h3>
+          <p>Freundlicher Kontakt, Aufmerksamkeit und Unterstützung im täglichen Service.</p>
+        </article>
+
+        <article class="area reveal">
+          <small>02 · Küche</small>
+          <h3>Vorbereitung &amp; Unterstützung</h3>
+          <p>Mithilfe bei vorbereitenden Aufgaben und Unterstützung des Küchenteams.</p>
+        </article>
+
+        <article class="area reveal">
+          <small>03 · Organisation</small>
+          <h3>Allround-Unterstützung</h3>
+          <p>Flexibles Anpacken bei den Aufgaben, die im laufenden Betrieb gerade wichtig sind.</p>
+        </article>
+
+        <article class="area reveal">
+          <small>04 · Sauberkeit</small>
+          <h3>Ordnung &amp; Hygiene</h3>
+          <p>Bewusstsein dafür, dass ein sauberer und organisierter Arbeitsplatz zentral ist.</p>
+        </article>
+
+        <article class="area reveal">
+          <small>05 · Team</small>
+          <h3>Zusammenarbeit</h3>
+          <p>Direkte Kommunikation, gegenseitige Unterstützung und Arbeiten auf Augenhöhe.</p>
+        </article>
+
+        <article class="area reveal">
+          <small>06 · Entwicklung</small>
+          <h3>Lernbereitschaft</h3>
+          <p>Offenheit für neue Abläufe, Standards und Aufgaben im Restaurantbetrieb.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="kontakt">
+    <div class="container">
+      <div class="cta-box reveal">
+        <div class="cta-copy">
+          <div class="eyebrow">Bereit für ein Gespräch</div>
+          <h2>Ich freue mich auf ein <span style="color:var(--gold-2)">persönliches Kennenlernen.</span></h2>
+          <p>
+            Für Rückfragen oder eine Einladung zu einem Gespräch bin ich telefonisch erreichbar.
+            Die Kontaktdaten können mit einem Klick kopiert oder die Bewerbung direkt als PDF gedruckt werden.
+          </p>
+        </div>
+
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="tel:6029103965">☎ 6029103965</a>
+          <button class="btn btn-secondary" type="button" onclick="copyContact()">⧉ Kontakt kopieren</button>
+          <button class="btn btn-secondary" type="button" onclick="printApplication()">⎙ PDF / Drucken</button>
+        </div>
+      </div>
+
+      <div class="contact-row reveal">
+        <div class="contact-box">
+          <small>Name</small>
+          <strong>Jeff Jeremain</strong>
+        </div>
+        <div class="contact-box">
+          <small>Anschrift</small>
+          <strong>Bridge Street, 7294</strong>
+        </div>
+        <div class="contact-box">
+          <small>Telefon</small>
+          <strong><a href="tel:6029103965">6029103965</a></strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-row">
+    <span>© <span id="year"></span> Jeff Jeremain · Persönliche Bewerbung</span>
+    <span>Design inspiriert vom Wok-&amp;-Wonders-Auftritt · Single-File GitHub Pages Website</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   INTERAKTIONEN – alles ebenfalls in dieser index.html
+   ========================================================= */
+
+// Mobile Navigation
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {{
+  const open = navLinks.classList.toggle("open");
+  menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  menuBtn.textContent = open ? "✕" : "☰";
+}});
+
+navLinks.querySelectorAll("a").forEach(link => {{
+  link.addEventListener("click", () => {{
+    navLinks.classList.remove("open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.textContent = "☰";
+  }});
+}});
+
+// Scroll Reveal
+const revealElements = document.querySelectorAll(".reveal");
+const observer = new IntersectionObserver((entries) => {{
+  entries.forEach((entry) => {{
+    if (entry.isIntersecting) {{
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }}
+  }});
+}}, {{
+  threshold: 0.13,
+  rootMargin: "0px 0px -25px 0px"
+}});
+
+revealElements.forEach(el => observer.observe(el));
+
+// Scroll Progress
+const progress = document.getElementById("progress");
+function updateProgress() {{
+  const scrollTop = window.scrollY;
+  const height = document.documentElement.scrollHeight - window.innerHeight;
+  const percent = height > 0 ? (scrollTop / height) * 100 : 0;
+  progress.style.width = percent + "%";
+}}
+window.addEventListener("scroll", updateProgress, {{ passive: true }});
+updateProgress();
+
+// Toast Helper
+const toast = document.getElementById("toast");
+let toastTimer;
+function showToast(message) {{
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}}
+
+// Kontakt kopieren
+async function copyContact() {{
+  const contact = [
+    "Jeff Jeremain",
+    "Alter: 36 Jahre",
+    "Visum: 28",
+    "Anschrift: Bridge Street, 7294",
+    "Telefon: 6029103965"
+  ].join("\\n");
+
+  try {{
+    await navigator.clipboard.writeText(contact);
+    showToast("Kontaktdaten wurden kopiert.");
+  }} catch (error) {{
+    const temp = document.createElement("textarea");
+    temp.value = contact;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    showToast("Kontaktdaten wurden kopiert.");
+  }}
+}}
+
+// Als PDF speichern: Browser-Druckdialog öffnen.
+// Dort kann "Als PDF speichern" gewählt werden.
+function printApplication() {{
+  window.print();
+}}
+
+// Copyright-Jahr
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Kleine Parallax-Bewegung nur auf Geräten mit Maus
+const art = document.querySelector(".poster-shell");
+if (window.matchMedia("(pointer:fine)").matches && art) {{
+  window.addEventListener("mousemove", (e) => {{
+    const x = (e.clientX / window.innerWidth - 0.5) * 5;
+    const y = (e.clientY / window.innerHeight - 0.5) * 5;
+    art.style.transform = `rotate(1.1deg) translate(${{x}}px, ${{y}}px)`;
+  }}, {{ passive: true }});
+}}
+</script>
+</body>
+</html>
+"""
+
+out = Path("/mnt/data/index.html")
+out.write_text(html, encoding="utf-8")
+
+print(f"Fertig: {out}")
+print(f"Dateigröße: {out.stat().st_size / 1024:.1f} KB")
